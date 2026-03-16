@@ -45,19 +45,30 @@ node=node->link;
 }
 
 int main() {
-    struct Node* start = NULL; // Initially, the list is empty
-int totalItems,item,i;
-printf("How many Elements do you want to insert?");
-scanf("%d", &totalItems);
-for(i=0;i<totalItems;i++){
-    printf("Enter the values");
-    scanf("%d",&item);
-    insertAtBeginning(&start, item);
-    
+    struct Node* start = NULL;
+    int totalItems, item, i, newItem;
+
+    printf("How many elements do you want to create? ");
+    scanf("%d", &totalItems);
+
+    // Creating initial list
+    for(i = 0; i < totalItems; i++) {
+        printf("Enter value: ");
+        scanf("%d", &item);
+        insertAtBeginning(&start, item);
+    }
+
+    printf("\nInitial List:\n");
     printList(start);
-}
-printf("\nFinal Result:");
-printList(start);
+
+    // Asking which element to insert at beginning
+    printf("\nEnter the element you want to insert at the beginning: ");
+    scanf("%d", &newItem);
+
+    insertAtBeginning(&start, newItem);
+
+    printf("\nList after inserting at beginning:\n");
+    printList(start);
 
     return 0;
 }

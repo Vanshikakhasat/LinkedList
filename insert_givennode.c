@@ -6,30 +6,60 @@ struct Node {
     struct Node* link;
 };
 
-void insert_after_node(struct Node** start, struct Node* LOC, int item)
+void insertAfter(struct Node* start, int key, int item)
 {
-    struct Node* newNode = malloc(sizeof(struct Node));
+    struct Node *ptr, *newNode;
 
-    if (newNode == NULL) {
-        printf("Overflow: No memory available.\n");
+    ptr = start;
+
+    while(ptr != NULL && ptr->info != key){
+        ptr = ptr->link;
+    }
+
+    if(ptr == NULL){
+        printf("Element not found\n");
+        return;
+    }
+
+    newNode = (struct Node*)malloc(sizeof(struct Node));
+
+    if(newNode == NULL){
+        printf("Overflow\n");
         return;
     }
 
     newNode->info = item;
+    newNode->link = ptr->link;
+    ptr->link = newNode;
+}
 
-    if (LOC == NULL){
-        newNode->link = *start;
+void insertAtEnd(struct Node** start, int item)
+{
+    struct Node *ptr, *newNode;
+
+    newNode = (struct Node*)malloc(sizeof(struct Node));
+
+    newNode->info = item;
+    newNode->link = NULL;
+
+    if(*start == NULL){
         *start = newNode;
+        return;
     }
-    else{
-        newNode->link = LOC->link;
-        LOC->link = newNode;
+
+    ptr = *start;
+
+    while(ptr->link != NULL){
+        ptr = ptr->link;
     }
+
+    ptr->link = newNode;
 }
 
 void printList(struct Node* node)
 {
-    while (node != NULL){
+    printf("Current List: ");
+    while(node != NULL){
         printf("%d -> ", node->info);
         node = node->link;
     }
@@ -40,22 +70,29 @@ int main()
 {
     struct Node* start = NULL;
 
-    int totalItems, item, i;
+    int totalItems, item, key, newItem, i;
 
-    printf("How many Elements do you want to insert? ");
-    scanf("%d", &totalItems);
+    printf("How many elements do you want to create? ");
+    scanf("%d",&totalItems);
 
-    for(i = 0; i < totalItems; i++)
-    {
-        printf("Enter the value: ");
-        scanf("%d", &item);
-
-        insert_after_node(&start, NULL, item);
-
-        printList(start);
+    for(i=0;i<totalItems;i++){
+        printf("Enter value: ");
+        scanf("%d",&item);
+        insertAtEnd(&start,item);
     }
 
-    printf("\nFinal Result: ");
+    printf("\nInitial List:\n");
+    printList(start);
+
+    printf("\nAfter which element do you want to insert? ");
+    scanf("%d",&key);
+
+    printf("Enter the element to insert: ");
+    scanf("%d",&newItem);
+
+    insertAfter(start,key,newItem);
+
+    printf("\nList after insertion:\n");
     printList(start);
 
     return 0;
